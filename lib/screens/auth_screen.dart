@@ -90,10 +90,13 @@ class _AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formlKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
-  Map<String, String> _authData = {'email': '', 'password': ''};
+  Map<String, String> _authData = {'email': '', 'password': '','name': '', 'area': ''};
 
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _areaController = TextEditingController();
+
 
   AnimationController _controller;
   Animation<Offset> _slideAnimation;
@@ -143,6 +146,8 @@ class _AuthCardState extends State<AuthCard>
       await Provider.of<Auth>(context, listen: false).signUp(
         _authData['email'],
         _authData['password'],
+        _authData['name'],
+        _authData['area'],
       );
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
@@ -188,6 +193,7 @@ class _AuthCardState extends State<AuthCard>
     // TODO: implement dispose
     super.dispose();
     _controller.dispose();
+    _passwordController.dispose();
   }
 
   void _showErrorDialog(String errorMessage) {
@@ -216,12 +222,12 @@ class _AuthCardState extends State<AuthCard>
       child: AnimatedContainer(
         duration: Duration(microseconds: 300),
         curve: Curves.easeIn,
-        height: _authMode == AuthMode.SignUp ? 320 : 260,
+        height: _authMode == AuthMode.SignUp ? 700 : 230,
         constraints: BoxConstraints(
-          minHeight: _authMode == AuthMode.SignUp ? 380 : 300,
+          minHeight: _authMode == AuthMode.SignUp ? 1000 : 280,
         ),
         width: devicesize.width * 0.75,
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(20),
         child: Form(
           key: _formlKey,
           child: SingleChildScrollView(
@@ -259,7 +265,7 @@ class _AuthCardState extends State<AuthCard>
                   duration: Duration(milliseconds: 300),
                   constraints: BoxConstraints(
                     minHeight: _authMode == AuthMode.SignUp ? 60 : 0,
-                    maxHeight: _authMode == AuthMode.SignUp ? 120 : 0,
+                    maxHeight: _authMode == AuthMode.SignUp ? 110 : 0,
                   ),
                   curve: Curves.easeIn,
                   child: FadeTransition(
@@ -285,7 +291,71 @@ class _AuthCardState extends State<AuthCard>
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
+                ),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  constraints: BoxConstraints(
+                    minHeight: _authMode == AuthMode.SignUp ? 60 : 0,
+                    maxHeight: _authMode == AuthMode.SignUp ? 110 : 0,
+                  ),
+                  curve: Curves.easeIn,
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: TextFormField(
+                          decoration:
+                          InputDecoration(labelText: 'Enter Yor Name'),
+                          enabled: true,
+                          validator: AuthMode == AuthMode.SignUp
+                              ? (val) {
+                            if (val.length <4) {
+                              return 'name so short';
+                            }
+                            return null;
+                          }
+                              : null,
+                          onSaved: (val) {
+                            _authData['name'] = val;
+                          }),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  constraints: BoxConstraints(
+                    minHeight: _authMode == AuthMode.SignUp ? 60 : 0,
+                    maxHeight: _authMode == AuthMode.SignUp ? 110 : 0,
+                  ),
+                  curve: Curves.easeIn,
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: TextFormField(
+                          decoration:
+                          InputDecoration(labelText: 'Enter Your Area'),
+                          enabled: true,
+                          validator: AuthMode == AuthMode.SignUp
+                              ? (val) {
+                            if (val.length <4) {
+                              return ' area so short';
+                            }
+                            return null;
+                          }
+                              : null,
+                          onSaved: (val) {
+                            _authData['area'] = val;
+                          }),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 if (_isLoading) CircularProgressIndicator(),
                 RaisedButton(

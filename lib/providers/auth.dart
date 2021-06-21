@@ -1,6 +1,9 @@
 // @dart=2.9
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:souqalfurat/screens/auth_screen.dart';
 import '../models/http_exception.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -12,6 +15,10 @@ class Auth with ChangeNotifier {
   DateTime _expiryDate;
   String _userId;
   Timer _authTimer;
+  String uid2 ;
+  String nameUser;
+  String areaUser;
+  String dateUser;
 
   bool get isAuth {
     return _token != null;
@@ -31,7 +38,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> _authenticate(
-      String email, String password, String urlSegment) async {
+      [String email, String password, String urlSegment , String name , String area ,bool signUp]) async {
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyCElvO52-8gNnyAl_kOiN3sBGhaGDhdLGE';
     try {
@@ -45,6 +52,7 @@ class Auth with ChangeNotifier {
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
+      uid2=_userId;
 
       _token = responseData['idToken'];
       _userId = responseData['localId'];
@@ -60,22 +68,47 @@ class Auth with ChangeNotifier {
         'expiryDate': _expiryDate.toIso8601String(),
       });
       prefs.setString('userData', userData);
+      //save user info in firebase users
+
+        if(signUp)Firestore.instance.collection('users').document(_userId)
+            .setData({
+          'name': name,
+          'user_uid': _userId,
+          'area': area,
+          'password': password,
+          "time": DateFormat('yyyy-MM-dd-HH:mm')
+              .format(DateTime.now()),
+        });
+
+
+
     } catch (e) {
       throw e;
     }
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(String email, String password, String name, String area) async {
     // final _authFirebase = FirebaseAuth.instance;
     // _authFirebase.createUserWithEmailAndPassword(email: email, password: password).then((value) => {
     //   print(_authFirebase.currentUser.email),
     // });
     print('SignUp');
-    return _authenticate(email, password, 'signUp');
+    return _authenticate(email, password, 'signUp',name,area,true);
   }
 
   Future<void> logIn(String email, String password) async {
-    return _authenticate(email, password, 'signInWithPassword');
+    return _authenticate(email, password, 'signInWithPassword','','',false);
+  }
+  Future gitCurrentUserInfo()async{
+    DocumentSnapshot documentsUser;
+    DocumentReference documentRef =
+      Firestore.instance.collection('users').document(_userId);
+      documentsUser = await documentRef.get();
+      nameUser = documentsUser['name'];
+      areaUser = documentsUser['area'];
+      dateUser = documentsUser['time'];
+    notifyListeners();
+    return documentsUser;
   }
 
   Future<bool> tryAutoLogin() async {
@@ -93,7 +126,7 @@ class Auth with ChangeNotifier {
     _expiryDate = expiryDate;
     notifyListeners();
     _autoLoguot();
-
+print(userId);
     return true;
   }
 

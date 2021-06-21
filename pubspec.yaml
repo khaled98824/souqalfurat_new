@@ -36,6 +36,9 @@ dependencies:
   firebase_core:
   firebase_database: ^3.1.6
   firebase_storage: ^3.1.6
+  flutter_swiper:
+  font_awesome_flutter: ^9.1.0
+  intl: ^0.17.0
 
 
 dev_dependencies:
