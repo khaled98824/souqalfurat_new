@@ -25,7 +25,7 @@ class UserAdsScreen extends StatelessWidget {
           IconButton(
             // onPressed: () =>
             //     Navigator.of(context).pushNamed(EditProductScreen.routeName),
-            // icon: Icon(Icons.add),
+            icon: Icon(Icons.add),
           ),
         ],
       ),

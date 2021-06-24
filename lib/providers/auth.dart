@@ -75,6 +75,7 @@ class Auth with ChangeNotifier {
           'name': name,
           'user_uid': _userId,
           'area': area,
+          'email':email,
           'password': password,
           "time": DateFormat('yyyy-MM-dd-HH:mm')
               .format(DateTime.now()),

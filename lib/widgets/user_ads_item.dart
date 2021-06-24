@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:souqalfurat/screens/add_new_ad.dart';
 import '../providers/ads_provider.dart';
 //import 'package:real_shop/screens/edit_product.dart';
 
@@ -24,10 +25,10 @@ class UserProductItem extends StatelessWidget {
           children: [
             IconButton(
               icon: Icon(Icons.edit),
-              // onPressed: () => Navigator.of(context).pushNamed(
-              //   EditProductScreen.routeName,
-              //   arguments: id,
-              // ),
+              onPressed: () {
+                print(id);
+               Navigator.push(context, MaterialPageRoute(builder: (ctx)=>AddNewAd(ctx , id)));
+              }
             ),
             IconButton(
               icon: Icon(Icons.delete),

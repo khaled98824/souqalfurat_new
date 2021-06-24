@@ -21,9 +21,12 @@ import 'package:image_cropper/image_cropper.dart';
 
 class AddNewAd extends StatefulWidget {
   static const routeName = "AddNewAd";
+  final BuildContext ctx ;
+  final String id ;
+   AddNewAd( this.ctx,this.id) ;
 
   @override
-  _AddNewAdState createState() => _AddNewAdState();
+  _AddNewAdState createState() => _AddNewAdState(ctx ,id);
 }
 
 bool loadingImage = false;
@@ -84,6 +87,31 @@ var _isInit = true;
 var _isLoading = false;
 
 class _AddNewAdState extends State<AddNewAd> {
+  final BuildContext ctx ;
+final String id ;
+  _AddNewAdState(this.ctx,this.id) ;
+  @override
+  didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('idd $id');
+    productId = ModalRoute.of(ctx).settings.arguments as String;
+    _editedProduct = Provider.of<Products>(ctx).findById(productId);
+    if(_isInit){
+      if (productId!=null) {
+        print(' prodId = $productId');
+        _initialValues = {
+          "title": _editedProduct.name,
+          "description": _editedProduct.description,
+          "price": _editedProduct.price.toString(),
+          "imageUrl": '',
+        };
+        // _imageUrlController.text = _editedProduct.imageUrl;
+      }
+      _isInit = false;
+    }
+
+  }
   bool choseCategory = true;
   bool choseCategory2 = true;
   bool statusShow = true;
@@ -290,7 +318,6 @@ class _AddNewAdState extends State<AddNewAd> {
   QuerySnapshot documentsAds;
   List<String> newZList = [];
   DocumentSnapshot usersList;
-
   addNewZ() async {
     var firestore = Firestore.instance;
 
@@ -310,8 +337,17 @@ class _AddNewAdState extends State<AddNewAd> {
     }
   }
 
-  @override
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   super.dispose();
+  //   newZList.clear();
+  // }
+
+
+  var productId ;
   Widget build(BuildContext context) {
+
     final Size size = MediaQuery.of(context).size;
     return Material(
         color: Colors.white60,
@@ -1454,12 +1490,6 @@ class _AddNewAdState extends State<AddNewAd> {
         ]));
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    newZList.clear();
-  }
 
   deleteImage() {
     setState(() {

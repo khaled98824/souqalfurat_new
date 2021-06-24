@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
               Profile.routeName: (_) => Profile(),
               MyChats.routeName: (_) => MyChats(),
               MyAds.routeName: (_) => MyAds(),
-              AddNewAd.routeName: (_) => AddNewAd(),
+              AddNewAd.routeName: (_) => AddNewAd(context,''),
               AuthScreen.routeName: (_) => AuthScreen(),
               UserAdsScreen.routeName: (_) => UserAdsScreen(),
 
