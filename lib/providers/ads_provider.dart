@@ -30,7 +30,7 @@ class Products with ChangeNotifier {
   }
 
   Product findById(String id) {
-    return _items.firstWhere((prod) => prod.uid == id);
+    return _items.firstWhere((prod) => prod.id == id);
   }
 
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
@@ -55,14 +55,24 @@ class Products with ChangeNotifier {
             isFavorite: false,
             imagesUrl: prodData['imageUrl'],
             creatorId: prodData['creatorId'],
+            area: prodData['area'],
+            phone:  prodData['phone'],
+            status:  prodData['status'],
+            deviceNo:  prodData['deviceNo'],
+            category:  prodData['category'],
+            uid:  prodData['uid'],
+            department:  prodData['department'],
+            isRequest:  prodData['isRequest'],
+            views:  prodData['views'],
+            likes:  prodData['likes'],
 
 
           ),
         );
       });
       final Iterable<Product> aList = loadedProducts.where((element) => element.creatorId==userId);
-      notifyListeners();
       _items = aList.toList();
+      notifyListeners();
 
     } catch (e) {
       throw e;
@@ -113,7 +123,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url =
-          'https://souq-alfurat-89023.firebaseio.com/products/$id.json?auth=$authToken';
+          'https://souq-alfurat-89023.firebaseio.com/products/$id.json';
       await http.patch(Uri.parse(url),
           body: json.encode({
             'name': newProduct.name,

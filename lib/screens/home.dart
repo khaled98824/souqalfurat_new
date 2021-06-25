@@ -17,6 +17,8 @@ import 'package:souqalfurat/widgets/option_home.dart';
 import 'package:souqalfurat/widgets/searchArea.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'auth_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   static const routeName = "/home";
 
@@ -166,7 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: new Swiper(
                           itemBuilder: (ctx, int index) {
                             return InkWell(
-                              onTap: () {},
+                              onTap: () {
+                              },
                               child: Hero(
                                   tag: Text('imageAd'),
                                   child: ClipRRect(
@@ -368,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       Navigator.pushNamed(context, MyChats.routeName);
     } else if (_currentIndex == 2) {
-      Navigator.pushNamed(context, AddNewAd.routeName);
+      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>AddNewAd(context,null)));
       print(index);
     } else if (_currentIndex == 1) {
        Navigator.pushNamed(context, MyAds.routeName);

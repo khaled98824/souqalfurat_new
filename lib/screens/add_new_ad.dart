@@ -21,12 +21,14 @@ import 'package:image_cropper/image_cropper.dart';
 
 class AddNewAd extends StatefulWidget {
   static const routeName = "AddNewAd";
-  final BuildContext ctx ;
-  final String id ;
-   AddNewAd( this.ctx,this.id) ;
+  final BuildContext ctx;
+
+  final String id;
+
+  AddNewAd(this.ctx, this.id);
 
   @override
-  _AddNewAdState createState() => _AddNewAdState(ctx ,id);
+  _AddNewAdState createState() => _AddNewAdState(ctx, id);
 }
 
 bool loadingImage = false;
@@ -55,7 +57,7 @@ var _editedProduct = Product(
   name: '',
   description: '',
   price: 0.0,
-  imagesUrl: ['',''],
+  imagesUrl: ['', ''],
   area: '',
   category: '',
   department: '',
@@ -70,7 +72,7 @@ var _editedProduct = Product(
 var _initialValues = {
   "name": '',
   "description": '',
-  "price": '',
+  "price": 0.0,
   "imagesUrl": '',
   "area": '',
   "category": '',
@@ -80,38 +82,60 @@ var _initialValues = {
   "uid": '',
   "likes": '',
   "views": '',
-  "phone": '',
+  "phone": 0,
   "isRequest": '',
 };
 var _isInit = true;
 var _isLoading = false;
 
 class _AddNewAdState extends State<AddNewAd> {
-  final BuildContext ctx ;
-final String id ;
-  _AddNewAdState(this.ctx,this.id) ;
+  final BuildContext ctx;
+
+  final String id;
+
+  _AddNewAdState(this.ctx, this.id);
+
   @override
   didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     print('idd $id');
-    productId = ModalRoute.of(ctx).settings.arguments as String;
-    _editedProduct = Provider.of<Products>(ctx).findById(productId);
-    if(_isInit){
-      if (productId!=null) {
+
+    print('name prod ${_editedProduct.name}');
+    if (_isInit) {
+      if (id != null) {
+        _editedProduct = Provider.of<Products>(ctx).findById(id);
+
         print(' prodId = $productId');
         _initialValues = {
-          "title": _editedProduct.name,
-          "description": _editedProduct.description,
-          "price": _editedProduct.price.toString(),
-          "imageUrl": '',
+          'id': _editedProduct.id,
+          'name': _editedProduct.name,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price,
+          'area': _editedProduct.area,
+          'phone': _editedProduct.phone,
+          'status': _editedProduct.status,
+          'deviceNo': _editedProduct.deviceNo,
+          'category': _editedProduct.category,
+          'uid': _editedProduct.uid,
+          'department': _editedProduct.department,
+          'imagesUrl': _editedProduct.imagesUrl,
+          'isFavorite': _editedProduct.isFavorite,
+          'isRequest': _editedProduct.isRequest,
+          'views': _editedProduct.views,
+          'likes': _editedProduct.likes,
         };
-        // _imageUrlController.text = _editedProduct.imageUrl;
+        urlImages =_editedProduct.imagesUrl;
+        category =_editedProduct.category;
+        category2 = _editedProduct.department;
+        status =_editedProduct.status;
+        area = _editedProduct.area;
+
       }
       _isInit = false;
     }
-
   }
+
   bool choseCategory = true;
   bool choseCategory2 = true;
   bool statusShow = true;
@@ -236,38 +260,38 @@ final String id ;
   var status = 'مستعمل';
   var urlImages = List<String>();
   String imageUrl;
-  upImage()async{
+
+  upImage() async {
     loadingImage = true;
 
     var storageImage = FirebaseStorage.instance.ref().child(_image.path);
-   var taskUpload = storageImage.putFile(_image);
-   imageUrl = await (await taskUpload.onComplete).ref.getDownloadURL();
-   print(imageUrl);
-   loadingImage = false;
-   setState(() {
-     urlImages.add(imageUrl);
-     loadingImage = false;
+    var taskUpload = storageImage.putFile(_image);
+    imageUrl = await (await taskUpload.onComplete).ref.getDownloadURL();
+    print(imageUrl);
+    loadingImage = false;
+    setState(() {
+      urlImages.add(imageUrl);
+      loadingImage = false;
 
-     print(urlImages);
+      print(urlImages);
 
-     //show
-     if (image == null) {
-       image = _image;
-     } else if (image2 == null) {
-       image2 = _image;
-     } else if (image3 == null) {
-       image3 = _image;
-     } else if (image4 == null) {
-       image4 = _image;
-     } else if (image5 == null) {
-       image5 = _image;
-     } else if (image6 == null) {
-       image6 = _image;
-     } else if (image7 == null) {
-       image7 = _image;
-     }
-   });
-
+      //show
+      if (image == null) {
+        image = _image;
+      } else if (image2 == null) {
+        image2 = _image;
+      } else if (image3 == null) {
+        image3 = _image;
+      } else if (image4 == null) {
+        image4 = _image;
+      } else if (image5 == null) {
+        image5 = _image;
+      } else if (image6 == null) {
+        image6 = _image;
+      } else if (image7 == null) {
+        image7 = _image;
+      }
+    });
   }
 
   File _image;
@@ -318,6 +342,7 @@ final String id ;
   QuerySnapshot documentsAds;
   List<String> newZList = [];
   DocumentSnapshot usersList;
+
   addNewZ() async {
     var firestore = Firestore.instance;
 
@@ -337,17 +362,16 @@ final String id ;
     }
   }
 
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   super.dispose();
-  //   newZList.clear();
-  // }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    newZList.clear();
+  }
 
+  var productId;
 
-  var productId ;
   Widget build(BuildContext context) {
-
     final Size size = MediaQuery.of(context).size;
     return Material(
         color: Colors.white60,
@@ -868,8 +892,6 @@ final String id ;
                                   likes: _editedProduct.likes,
                                   deviceNo: _editedProduct.deviceNo,
                                   isRequest: _editedProduct.isRequest,
-
-
                                 );
                               },
                               maxLines: 1,
@@ -940,9 +962,6 @@ final String id ;
                                   likes: _editedProduct.likes,
                                   deviceNo: _editedProduct.deviceNo,
                                   isRequest: _editedProduct.isRequest,
-
-
-
                                 );
                               },
 
@@ -1025,7 +1044,8 @@ final String id ;
                                         _editedProduct = Product(
                                           id: _editedProduct.id,
                                           name: _editedProduct.name,
-                                          description: _editedProduct.description,
+                                          description:
+                                              _editedProduct.description,
                                           price: _editedProduct.price,
                                           area: _editedProduct.area,
                                           phone: _editedProduct.phone,
@@ -1038,7 +1058,6 @@ final String id ;
                                           likes: _editedProduct.likes,
                                           deviceNo: _editedProduct.deviceNo,
                                           isRequest: _editedProduct.isRequest,
-
                                         );
                                       });
                                     },
@@ -1063,7 +1082,8 @@ final String id ;
                                         _editedProduct = Product(
                                           id: _editedProduct.id,
                                           name: _editedProduct.name,
-                                          description: _editedProduct.description,
+                                          description:
+                                              _editedProduct.description,
                                           price: _editedProduct.price,
                                           area: _editedProduct.area,
                                           phone: _editedProduct.phone,
@@ -1076,7 +1096,6 @@ final String id ;
                                           likes: _editedProduct.likes,
                                           deviceNo: _editedProduct.deviceNo,
                                           isRequest: _editedProduct.isRequest,
-
                                         );
                                       });
                                     },
@@ -1141,7 +1160,6 @@ final String id ;
                                     likes: _editedProduct.likes,
                                     deviceNo: _editedProduct.deviceNo,
                                     isRequest: _editedProduct.isRequest,
-
                                   );
                                   showAreaTextField = true;
                                 });
@@ -1169,11 +1187,12 @@ final String id ;
                                         }
                                         return null;
                                       },
-                                      onSaved: (val){
+                                      onSaved: (val) {
                                         _editedProduct = Product(
                                           id: _editedProduct.id,
                                           name: _editedProduct.name,
-                                          description: _editedProduct.description,
+                                          description:
+                                              _editedProduct.description,
                                           price: _editedProduct.price,
                                           area: area,
                                           phone: _editedProduct.phone,
@@ -1186,7 +1205,6 @@ final String id ;
                                           likes: _editedProduct.likes,
                                           deviceNo: _editedProduct.deviceNo,
                                           isRequest: _editedProduct.isRequest,
-
                                         );
                                       },
                                       maxLength: 20,
@@ -1246,7 +1264,8 @@ final String id ;
                               width: 230,
                               height: 43,
                               child: TextFormField(
-                                controller: priceController,
+                                initialValue:
+                                    _initialValues['price'].toString(),
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return ' ضع سعر لإعلانك';
@@ -1259,7 +1278,7 @@ final String id ;
                                   }
                                   return null;
                                 },
-                                onSaved: (val){
+                                onSaved: (val) {
                                   _editedProduct = Product(
                                     id: _editedProduct.id,
                                     name: _editedProduct.name,
@@ -1276,7 +1295,6 @@ final String id ;
                                     likes: _editedProduct.likes,
                                     deviceNo: _editedProduct.deviceNo,
                                     isRequest: _editedProduct.isRequest,
-
                                   );
                                 },
                                 keyboardType: TextInputType.numberWithOptions(
@@ -1338,14 +1356,15 @@ final String id ;
                               width: 230,
                               height: 43,
                               child: TextFormField(
-                                controller: phoneController,
+                                initialValue:
+                                    _initialValues['phone'].toString(),
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return '!... أدخل رقم جوالك';
                                   }
                                   return null;
                                 },
-                                onSaved: (val){
+                                onSaved: (val) {
                                   _editedProduct = Product(
                                     id: _editedProduct.id,
                                     name: _editedProduct.name,
@@ -1362,7 +1381,6 @@ final String id ;
                                     likes: _editedProduct.likes,
                                     deviceNo: _editedProduct.deviceNo,
                                     isRequest: _editedProduct.isRequest,
-
                                   );
                                 },
                                 textAlign: TextAlign.right,
@@ -1421,19 +1439,19 @@ final String id ;
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(30),
                               child: InkWell(
-                                onTap: () async{
-
-                                  final isValid = _formkey.currentState.validate();
+                                onTap: () async {
+                                  final isValid =
+                                      _formkey.currentState.validate();
                                   _formkey.currentState.save();
-                                  price = double.parse(priceText);
+
                                   _editedProduct = Product(
-                                      id: _editedProduct.id,
-                                      name: _editedProduct.name,
-                                      description: _editedProduct.description,
-                                      price: _editedProduct.price,
-                                      area: '$area- ${areaController.text}',
-                                      phone: _editedProduct.phone,
-                                  status: status,
+                                    id: _editedProduct.id,
+                                    name: _editedProduct.name,
+                                    description: _editedProduct.description,
+                                    price: _editedProduct.price,
+                                    area: '$area- ${areaController.text}',
+                                    phone: _editedProduct.phone,
+                                    status: status,
                                     deviceNo: _editedProduct.deviceNo,
                                     category: category,
                                     uid: _editedProduct.uid,
@@ -1444,22 +1462,48 @@ final String id ;
                                     views: _editedProduct.views,
                                     likes: _editedProduct.likes,
                                   );
-                                  try {
-                                    await Provider.of<Products>(context, listen: false)
-                                        .addProduct(_editedProduct);
-                                  } catch (e) {
-                                    await showDialog(
-                                        context: context,
-                                        builder: (ctx) => AlertDialog(
-                                      title: Text('An error occurred!'),
-                                      content: Text('SomeThing Wrong'),
-                                      actions: [
-                                        FlatButton(
-                                          onPressed: () => Navigator.of(ctx).pop(),
-                                          child: Text('Okay!'),)
-                                      ],
-                                    ));
-                                }
+                                 if(id!=null){
+                                   try {
+                                     await Provider.of<Products>(context,
+                                         listen: false)
+                                         .updateProduct(id,_editedProduct);
+                                   } catch (e) {
+                                     await showDialog(
+                                         context: context,
+                                         builder: (ctx) => AlertDialog(
+                                           title: Text('An error occurred!'),
+                                           content: Text('SomeThing Wrong'),
+                                           actions: [
+                                             FlatButton(
+                                               onPressed: () =>
+                                                   Navigator.of(ctx).pop(),
+                                               child: Text('Okay!'),
+                                             )
+                                           ],
+                                         ));
+                                   }
+                                 }else{
+                                   price = double.parse(priceText);
+                                   try {
+                                     await Provider.of<Products>(context,
+                                         listen: false)
+                                         .addProduct(_editedProduct);
+                                   } catch (e) {
+                                     await showDialog(
+                                         context: context,
+                                         builder: (ctx) => AlertDialog(
+                                           title: Text('An error occurred!'),
+                                           content: Text('SomeThing Wrong'),
+                                           actions: [
+                                             FlatButton(
+                                               onPressed: () =>
+                                                   Navigator.of(ctx).pop(),
+                                               child: Text('Okay!'),
+                                             )
+                                           ],
+                                         ));
+                                   }
+                                 }
                                 },
                                 child: Card(
                                   color: Colors.blue[900],
@@ -1490,7 +1534,6 @@ final String id ;
         ]));
   }
 
-
   deleteImage() {
     setState(() {
       image = null;
@@ -1510,6 +1553,7 @@ final String id ;
       urlImages.clear();
     });
   }
+
   showMessage(String msg) {
     Fluttertoast.showToast(
         msg: msg,

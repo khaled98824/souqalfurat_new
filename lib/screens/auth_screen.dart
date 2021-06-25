@@ -1,15 +1,19 @@
 // @dart=2.9
 
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth-screen';
+  @override
   @override
   Widget build(BuildContext context) {
     final devicesize = MediaQuery.of(context).size;
@@ -66,7 +70,7 @@ class AuthScreen extends StatelessWidget {
                         ),
                       ),
                       Flexible(
-                        flex: devicesize.width > 600 ? 2 : 1,
+                        flex: devicesize.width > 600 ? 1.5 : 1,
                         child: AuthCard(),
                       )
                     ],
@@ -93,7 +97,8 @@ class _AuthCardState extends State<AuthCard>
   Map<String, String> _authData = {'email': '', 'password': '','name': '', 'area': ''};
 
   var _isLoading = false;
-  final _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   final _nameController = TextEditingController();
   final _areaController = TextEditingController();
 
@@ -106,9 +111,13 @@ class _AuthCardState extends State<AuthCard>
   void initState() {
     // TODO: implement initState
     super.initState();
+    Timer(Duration(milliseconds: 400),(){
+      autoFillFields();
+    });
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
+
     );
 
     _slideAnimation = Tween<Offset>(
@@ -124,6 +133,18 @@ class _AuthCardState extends State<AuthCard>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
   }
 
+  autoFillFields()async{
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('info')) return false;
+
+    final extractedData =
+    json.decode(prefs.getString('info')) as Map<String, Object>;
+    setState(() {
+      _emailController = TextEditingController(text:extractedData['email']) ;
+      _passwordController = TextEditingController(text:extractedData['password']) ;
+
+    });
+  }
   Future<void> _submit() async {
     print('sup1');
     if (!_formlKey.currentState.validate()) {
@@ -222,12 +243,13 @@ class _AuthCardState extends State<AuthCard>
       child: AnimatedContainer(
         duration: Duration(microseconds: 300),
         curve: Curves.easeIn,
-        height: _authMode == AuthMode.SignUp ? 700 : 230,
+        height: _authMode == AuthMode.SignUp ? 777 : 230,
         constraints: BoxConstraints(
-          minHeight: _authMode == AuthMode.SignUp ? 1000 : 280,
+          minHeight: _authMode == AuthMode.SignUp ? 777 : 250,
+          maxHeight: _authMode == AuthMode.SignUp ? 888 : 280,
         ),
         width: devicesize.width * 0.75,
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top: 5,right: 20,left: 20),
         child: Form(
           key: _formlKey,
           child: SingleChildScrollView(
@@ -235,6 +257,7 @@ class _AuthCardState extends State<AuthCard>
               children: [
                 TextFormField(
                     decoration: InputDecoration(labelText: 'E-mail'),
+                    controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (val) {
                       if (val.isEmpty || !val.contains('@')) {
@@ -246,7 +269,7 @@ class _AuthCardState extends State<AuthCard>
                       _authData['email'] = val;
                     }),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 TextFormField(
                     decoration: InputDecoration(labelText: 'Password'),
@@ -264,8 +287,8 @@ class _AuthCardState extends State<AuthCard>
                 AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   constraints: BoxConstraints(
-                    minHeight: _authMode == AuthMode.SignUp ? 60 : 0,
-                    maxHeight: _authMode == AuthMode.SignUp ? 110 : 0,
+                    minHeight: _authMode == AuthMode.SignUp ? 50 : 0,
+                    maxHeight: _authMode == AuthMode.SignUp ? 50 : 0,
                   ),
                   curve: Curves.easeIn,
                   child: FadeTransition(
@@ -276,6 +299,7 @@ class _AuthCardState extends State<AuthCard>
                           decoration:
                               InputDecoration(labelText: 'Confirm Password'),
                           enabled: true,
+                          controller: _emailController,
                           validator: AuthMode == AuthMode.SignUp
                               ? (val) {
                                   if (val != _passwordController.text) {
@@ -291,13 +315,13 @@ class _AuthCardState extends State<AuthCard>
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 6,
                 ),
                 AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   constraints: BoxConstraints(
-                    minHeight: _authMode == AuthMode.SignUp ? 60 : 0,
-                    maxHeight: _authMode == AuthMode.SignUp ? 110 : 0,
+                    minHeight: _authMode == AuthMode.SignUp ? 50 : 0,
+                    maxHeight: _authMode == AuthMode.SignUp ? 50 : 0,
                   ),
                   curve: Curves.easeIn,
                   child: FadeTransition(
@@ -328,8 +352,8 @@ class _AuthCardState extends State<AuthCard>
                 AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   constraints: BoxConstraints(
-                    minHeight: _authMode == AuthMode.SignUp ? 60 : 0,
-                    maxHeight: _authMode == AuthMode.SignUp ? 110 : 0,
+                    minHeight: _authMode == AuthMode.SignUp ? 50 : 0,
+                    maxHeight: _authMode == AuthMode.SignUp ? 50 : 0,
                   ),
                   curve: Curves.easeIn,
                   child: FadeTransition(
@@ -355,7 +379,7 @@ class _AuthCardState extends State<AuthCard>
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 if (_isLoading) CircularProgressIndicator(),
                 RaisedButton(
@@ -363,7 +387,7 @@ class _AuthCardState extends State<AuthCard>
                   onPressed: _submit,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                   color: Theme.of(context).primaryColor,
                   textColor: Theme.of(context).primaryTextTheme.bodyText2.color,
                 ),
@@ -372,7 +396,7 @@ class _AuthCardState extends State<AuthCard>
                   child: Text(
                       '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                   textColor: Colors.black.withOpacity(0.6),
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                   color: Colors.white,
                 )
               ],

@@ -62,7 +62,19 @@ class Auth with ChangeNotifier {
       notifyListeners();
 
       final prefs = await SharedPreferences.getInstance();
+      final prefs2 = await SharedPreferences.getInstance();
+      String userData2 = json.encode({
+        'email':email,
+        'password':password,
+        'token': _token,
+        'userId': _userId,
+        'expiryDate': _expiryDate.toIso8601String(),
+      });
+      prefs2.setString('info',userData2);
+
       String userData = json.encode({
+        'email':email,
+        'password':password,
         'token': _token,
         'userId': _userId,
         'expiryDate': _expiryDate.toIso8601String(),
@@ -72,6 +84,7 @@ class Auth with ChangeNotifier {
 
         if(signUp)Firestore.instance.collection('users').document(_userId)
             .setData({
+          'token':_token,
           'name': name,
           'user_uid': _userId,
           'area': area,
@@ -81,18 +94,12 @@ class Auth with ChangeNotifier {
               .format(DateTime.now()),
         });
 
-
-
     } catch (e) {
       throw e;
     }
   }
 
   Future<void> signUp(String email, String password, String name, String area) async {
-    // final _authFirebase = FirebaseAuth.instance;
-    // _authFirebase.createUserWithEmailAndPassword(email: email, password: password).then((value) => {
-    //   print(_authFirebase.currentUser.email),
-    // });
     print('SignUp');
     return _authenticate(email, password, 'signUp',name,area,true);
   }
@@ -100,6 +107,7 @@ class Auth with ChangeNotifier {
   Future<void> logIn(String email, String password) async {
     return _authenticate(email, password, 'signInWithPassword','','',false);
   }
+
   Future gitCurrentUserInfo()async{
     DocumentSnapshot documentsUser;
     DocumentReference documentRef =
@@ -127,7 +135,6 @@ class Auth with ChangeNotifier {
     _expiryDate = expiryDate;
     notifyListeners();
     _autoLoguot();
-print(userId);
     return true;
   }
 

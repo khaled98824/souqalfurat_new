@@ -26,7 +26,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                print(id);
+                print(' id user item $id');
                Navigator.push(context, MaterialPageRoute(builder: (ctx)=>AddNewAd(ctx , id)));
               }
             ),
