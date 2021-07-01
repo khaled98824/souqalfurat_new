@@ -19,7 +19,11 @@ class AuthScreen extends StatelessWidget {
     final devicesize = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Auth'),
+          title: Text(
+            'التسجيل',
+            style: TextStyle(fontFamily: 'Montserrat-Arabic Regular'),
+          ),
+          backgroundColor: Color.fromRGBO(243, 110, 41, 1),
         ),
         body: Stack(
           children: [
@@ -27,8 +31,8 @@ class AuthScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                     colors: [
-                      Color.fromRGBO(215, 117, 255, 0.5),
-                      Color.fromRGBO(255, 188, 117, 0.9)
+                      Color.fromRGBO(243, 110, 41, 0.5),
+                      Color.fromRGBO(239, 71, 35, 0.9)
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -42,6 +46,7 @@ class AuthScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // Image.asset('assets/images/1024.jpg'),
                       Flexible(
                         child: Container(
                           margin: EdgeInsets.only(bottom: 20),
@@ -58,15 +63,8 @@ class AuthScreen extends StatelessWidget {
                                     color: Colors.black26,
                                     offset: Offset(0, 4))
                               ]),
-                          child: Text(
-                            'My Shop',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 50,
-                              fontFamily: 'Anton',
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
+                          child: Text('سوق الفرات',
+                              style: Theme.of(context).textTheme.headline6),
                         ),
                       ),
                       Flexible(
@@ -94,14 +92,18 @@ class _AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formlKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
-  Map<String, String> _authData = {'email': '', 'password': '','name': '', 'area': ''};
+  Map<String, String> _authData = {
+    'email': '',
+    'password': '',
+    'name': '',
+    'area': ''
+  };
 
   var _isLoading = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _nameController = TextEditingController();
   final _areaController = TextEditingController();
-
 
   AnimationController _controller;
   Animation<Offset> _slideAnimation;
@@ -111,13 +113,12 @@ class _AuthCardState extends State<AuthCard>
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(Duration(milliseconds: 400),(){
+    Timer(Duration(milliseconds: 400), () {
       autoFillFields();
     });
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
-
     );
 
     _slideAnimation = Tween<Offset>(
@@ -133,18 +134,19 @@ class _AuthCardState extends State<AuthCard>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
   }
 
-  autoFillFields()async{
+  autoFillFields() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('info')) return false;
 
     final extractedData =
-    json.decode(prefs.getString('info')) as Map<String, Object>;
+        json.decode(prefs.getString('info')) as Map<String, Object>;
     setState(() {
-      _emailController = TextEditingController(text:extractedData['email']) ;
-      _passwordController = TextEditingController(text:extractedData['password']) ;
-
+      _emailController = TextEditingController(text: extractedData['email']);
+      _passwordController =
+          TextEditingController(text: extractedData['password']);
     });
   }
+
   Future<void> _submit() async {
     print('sup1');
     if (!_formlKey.currentState.validate()) {
@@ -219,13 +221,13 @@ class _AuthCardState extends State<AuthCard>
 
   void _showErrorDialog(String errorMessage) {
     showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
+      //context: context,
+      builder: (context) => AlertDialog(
         title: Text('An Error Occurred !'),
         content: Text(errorMessage),
         actions: [
-          FlatButton(
-              onPressed: () => Navigator.of(ctx).pop(), child: Text('Okay'))
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(), child: Text('Okay'))
         ],
       ),
     );
@@ -249,7 +251,7 @@ class _AuthCardState extends State<AuthCard>
           maxHeight: _authMode == AuthMode.SignUp ? 888 : 280,
         ),
         width: devicesize.width * 0.75,
-        padding: EdgeInsets.only(top: 5,right: 20,left: 20),
+        padding: EdgeInsets.only(top: 5, right: 20, left: 20),
         child: Form(
           key: _formlKey,
           child: SingleChildScrollView(
@@ -330,15 +332,15 @@ class _AuthCardState extends State<AuthCard>
                       position: _slideAnimation,
                       child: TextFormField(
                           decoration:
-                          InputDecoration(labelText: 'Enter Yor Name'),
+                              InputDecoration(labelText: 'Enter Yor Name'),
                           enabled: true,
                           validator: AuthMode == AuthMode.SignUp
                               ? (val) {
-                            if (val.length <4) {
-                              return 'name so short';
-                            }
-                            return null;
-                          }
+                                  if (val.length < 4) {
+                                    return 'name so short';
+                                  }
+                                  return null;
+                                }
                               : null,
                           onSaved: (val) {
                             _authData['name'] = val;
@@ -362,15 +364,15 @@ class _AuthCardState extends State<AuthCard>
                       position: _slideAnimation,
                       child: TextFormField(
                           decoration:
-                          InputDecoration(labelText: 'Enter Your Area'),
+                              InputDecoration(labelText: 'Enter Your Area'),
                           enabled: true,
                           validator: AuthMode == AuthMode.SignUp
                               ? (val) {
-                            if (val.length <4) {
-                              return ' area so short';
-                            }
-                            return null;
-                          }
+                                  if (val.length < 4) {
+                                    return ' area so short';
+                                  }
+                                  return null;
+                                }
                               : null,
                           onSaved: (val) {
                             _authData['area'] = val;

@@ -44,6 +44,10 @@ dependencies:
   flutter_spinkit:
   fluttertoast:
   image_cropper:
+  photo_view:
+  photo_gallery:
+  carousel_slider:
+  url_launcher:
 
 
 
@@ -81,6 +85,16 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
+  fonts:
+    - family: FF Shamel Family Sans One Book
+      fonts:
+        - asset: assets/fonts/shamel.ttf
+#    - family: Montserrat-Arabic Bold
+#      fonts:
+#        - asset: assets/fonts/Montserrat-Arabic-Bold.ttf
+    - family: Montserrat-Arabic Regular
+      fonts:
+        - asset: assets/fonts/Montserrat-Arabic-Regular.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

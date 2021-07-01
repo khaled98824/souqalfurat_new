@@ -24,12 +24,7 @@ class _SearchAreaDesignState extends State<SearchAreaDesign> {
             alignment: Alignment(0.3, 0),
             children: <Widget>[
               Text('!... إبحث في سوق الفرات',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: 'AmiriQuran',
-                    height: 1,
-                  )),
+                  style: Theme.of(context).textTheme.headline5),
               Align(
                   alignment: Alignment(0.9, 0),
                   child: Icon(

@@ -26,9 +26,10 @@ class _OptionsHomeState extends State<OptionsHome> {
             child: Container(
               child: Row(
                 children: [
-                  Text('سعر الصرف',style: TextStyle(
-                      fontFamily: 'AmiriQuran',
-                      fontWeight: FontWeight.w600
+                  Text('سعر 1الصرف',style: TextStyle(
+                      fontFamily: 'Montserrat-Arabic Regular',
+                      fontWeight: FontWeight.w600,
+                    fontSize: 44
                   )
                   ),
                 ],
@@ -69,10 +70,7 @@ class _OptionsHomeState extends State<OptionsHome> {
             child: Container(
                 child:Row(
                   children: [
-                    Text('الأقسام',style: TextStyle(
-                        fontFamily: 'AmiriQuran',
-                        fontWeight: FontWeight.w600
-                    )
+                    Text('الأقسام',style: Theme.of(context).textTheme.headline4
                     )
                   ],
                 )),

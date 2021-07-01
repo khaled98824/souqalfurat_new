@@ -125,12 +125,11 @@ class _AddNewAdState extends State<AddNewAd> {
           'views': _editedProduct.views,
           'likes': _editedProduct.likes,
         };
-        urlImages =_editedProduct.imagesUrl;
-        category =_editedProduct.category;
+        urlImages = _editedProduct.imagesUrl;
+        category = _editedProduct.category;
         category2 = _editedProduct.department;
-        status =_editedProduct.status;
+        status = _editedProduct.status;
         area = _editedProduct.area;
-
       }
       _isInit = false;
     }
@@ -365,6 +364,7 @@ class _AddNewAdState extends State<AddNewAd> {
   @override
   void dispose() {
     // TODO: implement dispose
+
     super.dispose();
     newZList.clear();
   }
@@ -392,7 +392,7 @@ class _AddNewAdState extends State<AddNewAd> {
                           'أضف إعلانك',
                           style: TextStyle(
                               fontSize: 22,
-                              fontFamily: 'AmiriQuran',
+                              fontFamily: 'Montserrat-Arabic Regular',
                               height: 1.5),
                         ),
                         InkWell(
@@ -444,6 +444,8 @@ class _AddNewAdState extends State<AddNewAd> {
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontSize: 14,
+                                                fontFamily:
+                                                    'Montserrat-Arabic Regular',
                                                 color: Colors.white),
                                           )
                                         ],
@@ -628,7 +630,7 @@ class _AddNewAdState extends State<AddNewAd> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 20,
-                                    fontFamily: 'AmiriQuran',
+                                    fontFamily: 'Montserrat-Arabic Regular',
                                     height: 1.5),
                               )),
                         ],
@@ -787,7 +789,8 @@ class _AddNewAdState extends State<AddNewAd> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 16,
-                                          fontFamily: 'AmiriQuran',
+                                          fontFamily:
+                                              'Montserrat-Arabic Regular',
                                           height: 0.5),
                                     ),
                                   ],
@@ -838,7 +841,8 @@ class _AddNewAdState extends State<AddNewAd> {
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontSize: 16,
-                                                fontFamily: 'AmiriQuran',
+                                                fontFamily:
+                                                    'Montserrat-Arabic Regular',
                                                 height: 0.5),
                                           ),
                                         ],
@@ -910,7 +914,7 @@ class _AddNewAdState extends State<AddNewAd> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 16,
-                              fontFamily: 'AmiriQuran',
+                              fontFamily: 'Montserrat-Arabic Regular',
                               height: 1),
                         ),
                       ],
@@ -987,7 +991,7 @@ class _AddNewAdState extends State<AddNewAd> {
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 16,
-                                fontFamily: 'AmiriQuran',
+                                fontFamily: 'Montserrat-Arabic Regular',
                                 height: 1.8),
                           ),
                         ),
@@ -1016,7 +1020,7 @@ class _AddNewAdState extends State<AddNewAd> {
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(
                                     fontSize: 18,
-                                    fontFamily: 'AmiriQuran',
+                                    fontFamily: 'Montserrat-Arabic Regular',
                                     height: 1.8),
                               ),
                               SizedBox(
@@ -1030,7 +1034,8 @@ class _AddNewAdState extends State<AddNewAd> {
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
                                           fontSize: 19,
-                                          fontFamily: 'AmiriQuran',
+                                          fontFamily:
+                                              'Montserrat-Arabic Regular',
                                           height: 0.5),
                                     ),
                                     controlAffinity:
@@ -1068,7 +1073,8 @@ class _AddNewAdState extends State<AddNewAd> {
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
                                           fontSize: 19,
-                                          fontFamily: 'AmiriQuran',
+                                          fontFamily:
+                                              'Montserrat-Arabic Regular',
                                           height: 0.5),
                                     ),
                                     controlAffinity:
@@ -1172,7 +1178,7 @@ class _AddNewAdState extends State<AddNewAd> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 16,
-                                  fontFamily: 'AmiriQuran',
+                                  fontFamily: 'Montserrat-Arabic Regular',
                                   height: 1),
                             ),
                             showAreaTextField
@@ -1207,7 +1213,7 @@ class _AddNewAdState extends State<AddNewAd> {
                                           isRequest: _editedProduct.isRequest,
                                         );
                                       },
-                                      maxLength: 20,
+                                      maxLength: 30,
                                       textAlign: TextAlign.right,
                                       decoration: InputDecoration(
                                         hintText: '... أدخل منطقتك هنا',
@@ -1262,7 +1268,7 @@ class _AddNewAdState extends State<AddNewAd> {
                                 top: 5, bottom: 3, left: 3, right: 1),
                             child: SizedBox(
                               width: 230,
-                              height: 43,
+                              height: 38,
                               child: TextFormField(
                                 initialValue:
                                     _initialValues['price'].toString(),
@@ -1354,7 +1360,7 @@ class _AddNewAdState extends State<AddNewAd> {
                                 top: 6, bottom: 3, left: 3, right: 1),
                             child: SizedBox(
                               width: 230,
-                              height: 43,
+                              height: 38,
                               child: TextFormField(
                                 initialValue:
                                     _initialValues['phone'].toString(),
@@ -1462,57 +1468,80 @@ class _AddNewAdState extends State<AddNewAd> {
                                     views: _editedProduct.views,
                                     likes: _editedProduct.likes,
                                   );
-                                 if(id!=null){
-                                   try {
-                                     await Provider.of<Products>(context,
-                                         listen: false)
-                                         .updateProduct(id,_editedProduct);
-                                   } catch (e) {
-                                     await showDialog(
-                                         context: context,
-                                         builder: (ctx) => AlertDialog(
-                                           title: Text('An error occurred!'),
-                                           content: Text('SomeThing Wrong'),
-                                           actions: [
-                                             FlatButton(
-                                               onPressed: () =>
-                                                   Navigator.of(ctx).pop(),
-                                               child: Text('Okay!'),
-                                             )
-                                           ],
-                                         ));
-                                   }
-                                 }else{
-                                   price = double.parse(priceText);
-                                   try {
-                                     await Provider.of<Products>(context,
-                                         listen: false)
-                                         .addProduct(_editedProduct);
-                                   } catch (e) {
-                                     await showDialog(
-                                         context: context,
-                                         builder: (ctx) => AlertDialog(
-                                           title: Text('An error occurred!'),
-                                           content: Text('SomeThing Wrong'),
-                                           actions: [
-                                             FlatButton(
-                                               onPressed: () =>
-                                                   Navigator.of(ctx).pop(),
-                                               child: Text('Okay!'),
-                                             )
-                                           ],
-                                         ));
-                                   }
-                                 }
+                                  if (urlImages.length > 0) {
+                                    if (id != null) {
+                                      try {
+                                        await Provider.of<Products>(context,
+                                                listen: false)
+                                            .updateProduct(id, _editedProduct);
+                                      } catch (e) {
+                                        await showDialog(
+                                            context: context,
+                                            builder: (ctx) => AlertDialog(
+                                                  title: Text(
+                                                      'An error occurred!'),
+                                                  content:
+                                                      Text('SomeThing Wrong'),
+                                                  actions: [
+                                                    FlatButton(
+                                                      onPressed: () =>
+                                                          Navigator.of(ctx)
+                                                              .pop(),
+                                                      child: Text('Okay!'),
+                                                    )
+                                                  ],
+                                                ));
+                                      }
+                                    } else {
+                                      price = double.parse(priceText);
+                                      try {
+                                        await Provider.of<Products>(context,
+                                                listen: false)
+                                            .addProduct(_editedProduct);
+                                      } catch (e) {
+                                        await showDialog(
+                                            context: context,
+                                            builder: (ctx) => AlertDialog(
+                                                  title: Text(
+                                                      'An error occurred!'),
+                                                  content:
+                                                      Text('SomeThing Wrong'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.of(ctx)
+                                                              .pop(),
+                                                      child: Text('Okay!'),
+                                                    )
+                                                  ],
+                                                ));
+                                      }
+                                    }
+                                  } else {
+                                    await showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                              title: Text('لا يوجد صودة'),
+                                              content: Text('اضف صورة رجاءاً'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.of(ctx).pop(),
+                                                  child: Text('Okay!'),
+                                                )
+                                              ],
+                                            ));
+                                  }
                                 },
                                 child: Card(
                                   color: Colors.blue[900],
                                   child: Center(
-                                    child: Text('أنشر إعلانك',
+                                    child: Text('انشر إعلانك',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontSize: 21,
-                                            fontFamily: 'AmiriQuran',
+                                            fontFamily:
+                                                'Montserrat-Arabic Regular',
                                             height: 1,
                                             color: Colors.white)),
                                   ),

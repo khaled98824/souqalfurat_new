@@ -13,20 +13,20 @@ Widget head(screenSizeWidth2) {
                   width: 5,
                 )
               : SizedBox(
-                  width: 8,
+                  width: 5,
                 ),
           Text(
             'بيع واشتري كل ما تريد بكل سهولة',
             style: TextStyle(
               color: Colors.black,
-              fontSize: 18,
-              fontFamily: 'AmiriQuran',
+              fontSize: 15,
+              fontFamily: 'Montserrat-Arabic Regular',
               height: 1,
             ),
           ),
           Padding(
               padding: EdgeInsets.only(
-                  right: screenSizeWidth2 < 380 ? 11 : 28, left: 2),
+                  right: screenSizeWidth2 < 380 ? 11 : 16, left: 2),
               child: Image.asset(
                 'assets/images/logo.png',
                 height: 60,

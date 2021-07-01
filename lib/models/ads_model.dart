@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class Product with ChangeNotifier {
   final String name;
   final String id;
-  String creatorId ;
+  String creatorId;
   final String category;
   final String department;
   final DateTime time;
@@ -21,12 +21,12 @@ class Product with ChangeNotifier {
   final List imagesUrl;
   final int phone;
   final String uid;
-  final int likes;
+  int likes;
   final int views;
   final bool isRequest;
   final bool isFavorite;
 
-  Product(  {
+  Product({
     @required this.id,
     @required this.creatorId,
     @required this.name,
@@ -45,7 +45,6 @@ class Product with ChangeNotifier {
     @required this.views,
     @required this.isRequest,
     this.isFavorite,
-
   });
 
   void _setFavValue(bool newValue) {
@@ -54,7 +53,7 @@ class Product with ChangeNotifier {
   }
 
   Future<void> toggleFavoriteStatus(String token, String userId) async {
-     final oldStatus = isFavorite;
+    final oldStatus = isFavorite;
     // isFavorite = !isFavorite;
     notifyListeners();
 

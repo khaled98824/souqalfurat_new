@@ -11,6 +11,7 @@ import 'package:souqalfurat/screens/my_Ads.dart';
 import 'package:souqalfurat/screens/my_chats.dart';
 import 'package:souqalfurat/screens/profile_screen.dart';
 import 'package:souqalfurat/widgets/head.dart';
+import 'package:souqalfurat/widgets/new_Ads.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:souqalfurat/widgets/option_home.dart';
@@ -18,6 +19,7 @@ import 'package:souqalfurat/widgets/searchArea.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'auth_screen.dart';
+import 'constants.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/home";
@@ -61,7 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<Auth>(context,listen: false).gitCurrentUserInfo();
+    setState(() {
+      _currentIndex = 4;
+    });
+    Provider.of<Auth>(context, listen: false).gitCurrentUserInfo();
   }
 
   @override
@@ -70,276 +75,271 @@ class _HomeScreenState extends State<HomeScreen> {
     final fullDataP = Provider.of<FullDataProvider>(context);
 
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              head(screenSizeWidth),
-              SizedBox(
-                height: 10,
-              ),
-              SearchAreaDesign(),
-              SizedBox(
-                height: 12,
-              ),
-
-          Container(
-            height: 32,
-            width: MediaQuery.of(context).size.width -50,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4), color: Colors.grey[300]),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                  onTap: (){
-                    //Navigator.push(context, BouncyPageRoute(widget: Exchange()));
-                  },
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Text('سعر الصرف',style: TextStyle(
-                            fontFamily: 'AmiriQuran',
-                            fontWeight: FontWeight.w600
-                        )
-                        ),
-                      ],
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            head(screenSizeWidth),
+            SizedBox(
+              height: 10,
+            ),
+            SearchAreaDesign(),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 32,
+              width: MediaQuery.of(context).size.width - 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.grey[300]),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      //Navigator.push(context, BouncyPageRoute(widget: Exchange()));
+                    },
+                    child: Container(
+                      child: Row(
+                        children: [
+                          Text('سعر الصرف',
+                              style: Theme.of(context).textTheme.headline5),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4), color: Colors.grey[400]),
-                  height: 30,
-                  width: 1,
-                ),
-                InkWell(
-                  onTap: (){
-                    setState(() {
-                      adsOrCategory = true;
-                    });
-                  },
-                  child: Container(
-                      child:Row(
-                        children: [
-                          Text('الإعلانات',style: TextStyle(
-                              fontFamily: 'AmiriQuran',
-                              fontWeight: FontWeight.w600
-                          )
-                          )
-                        ],
-                      ) ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4), color: Colors.grey[400]),
-                  height: 30,
-                  width: 1,
-                ),
-                InkWell(
-                  onTap: (){
-                    setState(() {
-                      adsOrCategory =false;
-                    });
-                  },
-                  child: Container(
-                      child:Row(
-                        children: [
-                          Text('الأقسام',style: TextStyle(
-                              fontFamily: 'AmiriQuran',
-                              fontWeight: FontWeight.w600
-                          )
-                          )
-                        ],
-                      )),
-                ),
-
-              ],
-            ),
-          ),
-              SizedBox(height: 6,),
-              Consumer<FullDataProvider>(
-                  builder: (context, data, _) => FutureBuilder(
-                      future: fullDataP.getUrlsForAds(),
-                      builder: (context, data) => data.connectionState ==ConnectionState.waiting?CircularProgressIndicator()
-                          : Container(
-                        width: screenSizeWidth - 10,
-                        height: 85,
-                        child: new Swiper(
-                          itemBuilder: (ctx, int index) {
-                            return InkWell(
-                              onTap: () {
-                              },
-                              child: Hero(
-                                  tag: Text('imageAd'),
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(3),
-                                      child: Image.network(
-                                        data.data[index],
-                                        fit: BoxFit.fill,
-                                        // height: 75,
-                                        // width: 390,
-                                      ))),
-                            );
-                          },
-                          scrollDirection: Axis.horizontal,
-                          itemCount: fullDataP.adImagesUrlF.length,
-                          itemWidth: screenSizeWidth - 10,
-                          itemHeight: 99.0,
-                          duration: 2000,
-                          autoplayDelay: 13000,
-                          autoplay: true,
-                          // pagination: new SwiperPagination(
-                          //   alignment: Alignment.centerRight,
-                          // ),
-                          control: new SwiperControl(
-                            size: 18,
-                          ),
-                        ),
-                      )
-                  )),
-              SizedBox(
-                height: 10,
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[400]),
+                    height: 30,
+                    width: 1,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        adsOrCategory = true;
+                      });
+                    },
+                    child: Container(
+                        child: Row(
+                      children: [
+                        Text('الإعلانات',
+                            style: Theme.of(context).textTheme.headline5)
+                      ],
+                    )),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[400]),
+                    height: 30,
+                    width: 1,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        adsOrCategory = false;
+                      });
+                    },
+                    child: Container(
+                        child: Row(
+                      children: [
+                        Text('الأقسام',
+                            style: Theme.of(context).textTheme.headline5)
+                      ],
+                    )),
+                  ),
+                ],
               ),
-               Stack(
-                 children: [
-                  adsOrCategory ? Text('data'): Column(
-                     children: [
-
-                       Wrap(
-                           crossAxisAlignment: WrapCrossAlignment.center,
-                           alignment: WrapAlignment.spaceAround,
-                           children: <Widget>[
-                             ItemCategory(
-                               text: "أجهزة - إلكترونيات",
-                               imagePath: _listItem[0],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             ),
-                             ItemCategory(
-                               text: "السيارات - الدراجات",
-                               imagePath: _listItem[1],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             )
-                           ]),
-                       Wrap(
-                           crossAxisAlignment: WrapCrossAlignment.center,
-                           alignment: WrapAlignment.spaceAround,
-                           children: <Widget>[
-                             ItemCategory(
-                               text: "الموبايل",
-                               imagePath: _listItem[2],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             ),
-                             ItemCategory(
-                               text: "وظائف وأعمال",
-                               imagePath: _listItem[3],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             )
-                           ]),
-                       Wrap(
-                           crossAxisAlignment: WrapCrossAlignment.center,
-                           alignment: WrapAlignment.spaceAround,
-                           children: <Widget>[
-                             ItemCategory(
-                               text: "مهن وخدمات",
-                               imagePath: _listItem[4],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             ),
-                             ItemCategory(
-                               text: "المنزل",
-                               imagePath: _listItem[5],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             )
-                           ]),
-                       Wrap(
-                           crossAxisAlignment: WrapCrossAlignment.center,
-                           alignment: WrapAlignment.spaceAround,
-                           children: <Widget>[
-                             ItemCategory(
-                               text: "المعدات والشاحنات",
-                               imagePath: _listItem[6],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             ),
-                             ItemCategory(
-                               text: "المواشي",
-                               imagePath: _listItem[7],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             )
-                           ]),
-                       Wrap(
-                           crossAxisAlignment: WrapCrossAlignment.center,
-                           alignment: WrapAlignment.spaceAround,
-                           children: <Widget>[
-                             ItemCategory(
-                               text: "الزراعة",
-                               imagePath: _listItem[8],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             ),
-                             ItemCategory(
-                               text: "ألعاب",
-                               imagePath: _listItem[9],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             )
-                           ]),
-                       Wrap(
-                           crossAxisAlignment: WrapCrossAlignment.center,
-                           alignment: WrapAlignment.spaceAround,
-                           children: <Widget>[
-                             ItemCategory(
-                               text: "ألبسة",
-                               imagePath: _listItem[10],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             ),
-                             ItemCategory(
-                               text: "أطعمة",
-                               imagePath: _listItem[11],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             )
-                           ]),
-                       Wrap(
-                           crossAxisAlignment: WrapCrossAlignment.center,
-                           alignment: WrapAlignment.spaceAround,
-                           children: <Widget>[
-                             ItemCategory(
-                               text: "طلبات المستخدمين",
-                               imagePath: _listItem[12],
-                               callback: () {},
-                               screenSizeWidth2: screenSizeWidth,
-                             ),
-                           ]),
-                     ],
-                   ),
-
-                 ],
-               )
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 6,
+            ),
+            Consumer<FullDataProvider>(
+                builder: (context, data, _) => FutureBuilder(
+                    future: fullDataP.getUrlsForAds(),
+                    builder: (context, data) =>
+                        data.connectionState == ConnectionState.waiting
+                            ? CircularProgressIndicator()
+                            : Container(
+                                width: screenSizeWidth - 10,
+                                height: 85,
+                                child: new Swiper(
+                                  itemBuilder: (ctx, int index) {
+                                    return InkWell(
+                                      onTap: () {},
+                                      child: Hero(
+                                          tag: Text('imageAd'),
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                              child: Image.network(
+                                                data.data[index],
+                                                fit: BoxFit.fill,
+                                                // height: 75,
+                                                // width: 390,
+                                              ))),
+                                    );
+                                  },
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: fullDataP.adImagesUrlF.length,
+                                  itemWidth: screenSizeWidth - 10,
+                                  itemHeight: 99.0,
+                                  duration: 2000,
+                                  autoplayDelay: 13000,
+                                  autoplay: true,
+                                  // pagination: new SwiperPagination(
+                                  //   alignment: Alignment.centerRight,
+                                  // ),
+                                  control: new SwiperControl(
+                                    size: 18,
+                                  ),
+                                ),
+                              ))),
+            SizedBox(
+              height: 10,
+            ),
+            adsOrCategory
+                ? NewAdsItems()
+                : Column(
+                    children: [
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.spaceAround,
+                          children: <Widget>[
+                            ItemCategory(
+                              text: "أجهزة - إلكترونيات",
+                              imagePath: _listItem[0],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            ),
+                            ItemCategory(
+                              text: "السيارات - الدراجات",
+                              imagePath: _listItem[1],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            )
+                          ]),
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.spaceAround,
+                          children: <Widget>[
+                            ItemCategory(
+                              text: "الموبايل",
+                              imagePath: _listItem[2],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            ),
+                            ItemCategory(
+                              text: "وظائف وأعمال",
+                              imagePath: _listItem[3],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            )
+                          ]),
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.spaceAround,
+                          children: <Widget>[
+                            ItemCategory(
+                              text: "مهن وخدمات",
+                              imagePath: _listItem[4],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            ),
+                            ItemCategory(
+                              text: "المنزل",
+                              imagePath: _listItem[5],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            )
+                          ]),
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.spaceAround,
+                          children: <Widget>[
+                            ItemCategory(
+                              text: "المعدات والشاحنات",
+                              imagePath: _listItem[6],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            ),
+                            ItemCategory(
+                              text: "المواشي",
+                              imagePath: _listItem[7],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            )
+                          ]),
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.spaceAround,
+                          children: <Widget>[
+                            ItemCategory(
+                              text: "الزراعة",
+                              imagePath: _listItem[8],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            ),
+                            ItemCategory(
+                              text: "ألعاب",
+                              imagePath: _listItem[9],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            )
+                          ]),
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.spaceAround,
+                          children: <Widget>[
+                            ItemCategory(
+                              text: "ألبسة",
+                              imagePath: _listItem[10],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            ),
+                            ItemCategory(
+                              text: "أطعمة",
+                              imagePath: _listItem[11],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            )
+                          ]),
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.spaceAround,
+                          children: <Widget>[
+                            ItemCategory(
+                              text: "طلبات المستخدمين",
+                              imagePath: _listItem[12],
+                              callback: () {},
+                              screenSizeWidth2: screenSizeWidth,
+                            ),
+                          ]),
+                    ],
+                  )
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedIconTheme: IconThemeData(color: Colors.grey[400]),
         selectedIconTheme: IconThemeData(color: Colors.black),
-        unselectedLabelStyle: TextStyle(color: Colors.grey[400]),
-        selectedLabelStyle: TextStyle(color: Colors.black),
+        unselectedLabelStyle: TextStyle(
+            color: Colors.grey[400], fontFamily: 'Montserrat-Arabic Regular'),
+        selectedLabelStyle: TextStyle(
+            color: Colors.black, fontFamily: 'Montserrat-Arabic Regular'),
         fixedColor: Colors.green,
         type: BottomNavigationBarType.fixed,
         onTap: onTapped,
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.userTie), label: 'حسابي'),
+            icon: Icon(FontAwesomeIcons.userTie),
+            label: 'حسابي',
+          ),
           BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.images), label: 'إعلاناتي'),
           BottomNavigationBarItem(
@@ -350,7 +350,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               label: 'أضف إعلان'),
           BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.comments), label: 'محادثاتي'),
+            icon: Icon(FontAwesomeIcons.comments),
+            label: 'محادثاتي',
+          ),
           BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.home), label: 'الرئيسية'),
         ],
@@ -361,20 +363,20 @@ class _HomeScreenState extends State<HomeScreen> {
   void onTapped(int index) {
     setState(() {
       _currentIndex = index;
-
     });
     if (_currentIndex == 4) {
-       Navigator.pushNamed(context, HomeScreen.routeName);
+      Navigator.pushNamed(context, HomeScreen.routeName);
       print(index);
     } else if (_currentIndex == 3) {
       print(index);
 
       Navigator.pushNamed(context, MyChats.routeName);
     } else if (_currentIndex == 2) {
-      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>AddNewAd(context,null)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (ctx) => AddNewAd(context, null)));
       print(index);
     } else if (_currentIndex == 1) {
-       Navigator.pushNamed(context, MyAds.routeName);
+      Navigator.pushNamed(context, MyAds.routeName);
       print(index);
     } else if (_currentIndex == 0) {
       print(index);
@@ -393,10 +395,10 @@ class ItemCategory extends StatelessWidget {
   final double screenSizeWidth2;
 
   ItemCategory({
-     this.text,
-     this.callback,
-     this.imagePath,
-     this.screenSizeWidth2,
+    this.text,
+    this.callback,
+    this.imagePath,
+    this.screenSizeWidth2,
   });
 
   @override
@@ -420,21 +422,14 @@ class ItemCategory extends StatelessWidget {
             child: Transform.translate(
                 offset: Offset(22, -68),
                 child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 27, vertical: 71),
+                    margin: EdgeInsets.symmetric(horizontal: 25, vertical: 71),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
-                        color: Colors.grey[200]),
+                        color: Colors.grey[100]),
                     child: Center(
-                      child: Text(
-                        text,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontFamily: 'AmiriQuran',
-                          height: 1,
-                        ),
-                      ),
+                      child: Text(text,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline3),
                     ))),
           ),
         ),
