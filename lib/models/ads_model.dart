@@ -8,11 +8,12 @@ import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
   final String name;
+  final String creatorName;
   final String id;
   String creatorId;
   final String category;
   final String department;
-  final DateTime time;
+  final String time;
   final String status;
   final String description;
   final String area;
@@ -28,6 +29,7 @@ class Product with ChangeNotifier {
 
   Product({
     @required this.id,
+    @required this.creatorName,
     @required this.creatorId,
     @required this.name,
     @required this.category,

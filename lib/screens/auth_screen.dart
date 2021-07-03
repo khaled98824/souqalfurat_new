@@ -64,9 +64,9 @@ class AuthScreen extends StatelessWidget {
                                     offset: Offset(0, 4))
                               ]),
                           child: Text('سوق الفرات',
-                              style: Theme.of(context).textTheme.headline6),
+                              style: TextStyle(fontSize: 32,fontFamily: 'Montserrat-Arabic Regular',color: Colors.white)),
                         ),
-                      ),
+                      ), 
                       Flexible(
                         flex: devicesize.width > 600 ? 1.5 : 1,
                         child: AuthCard(),
@@ -221,7 +221,7 @@ class _AuthCardState extends State<AuthCard>
 
   void _showErrorDialog(String errorMessage) {
     showDialog(
-      //context: context,
+      context: context,
       builder: (context) => AlertDialog(
         title: Text('An Error Occurred !'),
         content: Text(errorMessage),

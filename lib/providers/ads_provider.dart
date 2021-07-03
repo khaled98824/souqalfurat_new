@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:souqalfurat/providers/auth.dart';
 import '../models/http_exception.dart';
 import '../models/ads_model.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [];
   List<Product> newItems = [];
+  List<Product> allItems = [];
+
 
   late String authToken;
   late String userId;
@@ -31,13 +36,12 @@ class Products with ChangeNotifier {
   }
 
   Product findById(String id) {
-    return _items.firstWhere((prod) => prod.id == id);
+    return allItems.firstWhere((prod) => prod.id == id);
   }
 
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     final filteredString =
         filterByUser ? '?orderBy="creatorId"equalTo="$userId' : '';
-    print('userId $userId');
     var url = 'https://souq-alfurat-89023.firebaseio.com/products.json';
     try {
       final res = await http.get(Uri.parse(url));
@@ -47,12 +51,14 @@ class Products with ChangeNotifier {
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(
           Product(
+            time: prodData['date'],
             id: prodId,
+            creatorName: prodData['creatorName'],
             name: prodData['name'],
             description: prodData['description'],
             price: prodData['price'],
             isFavorite: false,
-            imagesUrl: prodData['imageUrl'],
+            imagesUrl: prodData['imagesUrl'],
             creatorId: prodData['creatorId'],
             area: prodData['area'],
             phone: prodData['phone'],
@@ -67,6 +73,7 @@ class Products with ChangeNotifier {
           ),
         );
       });
+      allItems=_items;
       final Iterable<Product> aList =
           loadedProducts.where((element) => element.creatorId == userId);
       _items = aList.toList();
@@ -83,6 +90,8 @@ class Products with ChangeNotifier {
     try {
       final res = await http.post(Uri.parse(url),
           body: json.encode({
+            'date':product.time,
+            'creatorName':product.creatorName,
             'name': product.name,
             'description': product.description,
             'price': product.price,
@@ -121,6 +130,8 @@ class Products with ChangeNotifier {
       final url = 'https://souq-alfurat-89023.firebaseio.com/products/$id.json';
       await http.patch(Uri.parse(url),
           body: json.encode({
+            'date':newProduct.time,
+            'updateDate':DateFormat('yyyy-MM-dd-HH:mm').format(DateTime.now()),
             'name': newProduct.name,
             'description': newProduct.description,
             'price': newProduct.price,
@@ -191,6 +202,8 @@ class Products with ChangeNotifier {
         loadedProducts.add(
           Product(
             id: prodId,
+            time: prodData['date'],
+            creatorName: prodData['creatorName'],
             name: prodData['name'],
             description: prodData['description'],
             price: prodData['price'],

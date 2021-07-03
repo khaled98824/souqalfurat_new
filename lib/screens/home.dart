@@ -73,7 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final screenSizeWidth = MediaQuery.of(context).size.width;
     final fullDataP = Provider.of<FullDataProvider>(context);
-
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
@@ -82,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             head(screenSizeWidth),
             SizedBox(
-              height: 10,
+              height: 4,
             ),
             SearchAreaDesign(),
             SizedBox(
@@ -420,9 +419,9 @@ class ItemCategory extends StatelessWidget {
               color: Colors.redAccent,
             ),
             child: Transform.translate(
-                offset: Offset(22, -68),
+                offset: Offset(11, -68),
                 child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 25, vertical: 71),
+                    margin: EdgeInsets.symmetric(horizontal: 13, vertical: 71),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         color: Colors.grey[100]),

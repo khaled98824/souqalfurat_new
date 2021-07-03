@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:souqalfurat/models/ads_model.dart';
 import 'package:souqalfurat/providers/ads_provider.dart';
+import 'package:souqalfurat/providers/auth.dart';
 import '../screens/home.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
@@ -53,6 +54,8 @@ String imageUrl7;
 int phone;
 
 var _editedProduct = Product(
+  time: '',
+  creatorName: '',
   id: '',
   name: '',
   description: '',
@@ -70,6 +73,7 @@ var _editedProduct = Product(
   isRequest: false,
 );
 var _initialValues = {
+  "date":'',
   "name": '',
   "description": '',
   "price": 0.0,
@@ -373,6 +377,8 @@ class _AddNewAdState extends State<AddNewAd> {
 
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final userGetData = Provider.of<Auth>(context, listen: false).gitCurrentUserInfo();
+    final creatorName = Provider.of<Auth>(context,listen: false).nameUser;
     return Material(
         color: Colors.white60,
         child: Stack(overflow: Overflow.visible, children: <Widget>[
@@ -388,12 +394,17 @@ class _AddNewAdState extends State<AddNewAd> {
                         SizedBox(
                           width: 1,
                         ),
-                        Text(
-                          'أضف إعلانك',
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontFamily: 'Montserrat-Arabic Regular',
-                              height: 1.5),
+                        InkWell(
+                          onTap: (){
+                            print(creatorName);
+                          },
+                          child: Text(
+                            'أضف إعلانك',
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontFamily: 'Montserrat-Arabic Regular',
+                                height: 1.5),
+                          ),
                         ),
                         InkWell(
                             onTap: () {
@@ -1451,6 +1462,8 @@ class _AddNewAdState extends State<AddNewAd> {
                                   _formkey.currentState.save();
 
                                   _editedProduct = Product(
+                                    time: DateFormat('yyyy-MM-dd-HH:mm').format(DateTime.now()),
+                                    creatorName: creatorName,
                                     id: _editedProduct.id,
                                     name: _editedProduct.name,
                                     description: _editedProduct.description,
@@ -1474,6 +1487,7 @@ class _AddNewAdState extends State<AddNewAd> {
                                         await Provider.of<Products>(context,
                                                 listen: false)
                                             .updateProduct(id, _editedProduct);
+                                        Navigator.of(context).pop();
                                       } catch (e) {
                                         await showDialog(
                                             context: context,
@@ -1498,6 +1512,7 @@ class _AddNewAdState extends State<AddNewAd> {
                                         await Provider.of<Products>(context,
                                                 listen: false)
                                             .addProduct(_editedProduct);
+                                        Navigator.of(context).pop();
                                       } catch (e) {
                                         await showDialog(
                                             context: context,

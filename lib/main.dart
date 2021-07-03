@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:souqalfurat/providers/ads_provider.dart';
 import 'package:souqalfurat/providers/full_provider.dart';
 import 'package:souqalfurat/screens/add_new_ad.dart';
+import 'package:souqalfurat/screens/edit_account.dart';
 import 'package:souqalfurat/screens/home.dart';
 import 'package:souqalfurat/screens/my_chats.dart';
 import 'package:souqalfurat/screens/profile_screen.dart';
@@ -39,50 +40,52 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(
         builder: (context, auth, _) => MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-                fontFamily: 'Montserrat-Arabic Regular',
-                textTheme: ThemeData.light().textTheme.copyWith(
-                    headline6: TextStyle(
-                        fontFamily: 'Montserrat-Arabic Regular',
-                        fontSize: 44,
-                        color: Colors.white),
-                    headline5: TextStyle(
-                        fontFamily: 'Montserrat-Arabic Regular',
-                        fontSize: 18,
-                        color: Colors.black),
-                    headline4: TextStyle(
-                        fontFamily: 'Montserrat-Arabic Regular',
-                        fontSize: 18,
-                        color: Colors.white),
-                    headline3: TextStyle(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              fontFamily: 'Montserrat-Arabic Regular',
+              textTheme: ThemeData.light().textTheme.copyWith(
+                  headline6: TextStyle(
                       fontFamily: 'Montserrat-Arabic Regular',
-                      fontSize: 16,
-                      color: Colors.black,
-                    )),
-                appBarTheme: AppBarTheme(
-                    textTheme: ThemeData.light().textTheme.copyWith(
-                        headline6: TextStyle(
-                            fontFamily: 'Montserrat-Arabic Regular',
-                            fontSize: 22)))),
-            routes: {
-              HomeScreen.routeName: (_) => HomeScreen(),
-              Profile.routeName: (_) => Profile(),
-              MyChats.routeName: (_) => MyChats(),
-              MyAds.routeName: (_) => MyAds(),
-              AddNewAd.routeName: (_) => AddNewAd(context, ''),
-              AuthScreen.routeName: (_) => AuthScreen(),
-              UserAdsScreen.routeName: (_) => UserAdsScreen(),
-              ShowAd.routeName:(_)=> ShowAd(),
-            },
-            home: auth.isAuth
-                ? HomeScreen()
-                : FutureBuilder(
-                    future: auth.tryAutoLogin(),
-                    builder: (ctx, snapshot) =>
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? SplashScreen()
-                            : AuthScreen())),
+                      fontSize: 44,
+                      color: Colors.white),
+                  headline5: TextStyle(
+                      fontFamily: 'Montserrat-Arabic Regular',
+                      fontSize: 18,
+                      color: Colors.black),
+                  headline4: TextStyle(
+                      fontFamily: 'Montserrat-Arabic Regular',
+                      fontSize: 18,
+                      color: Colors.white),
+                  headline3: TextStyle(
+                    fontFamily: 'Montserrat-Arabic Regular',
+                    fontSize: 16,
+                    color: Colors.black.withOpacity(0.8),
+                  )),
+              appBarTheme: AppBarTheme(
+                  textTheme: ThemeData.light().textTheme.copyWith(
+                      headline6: TextStyle(
+                          fontFamily: 'Montserrat-Arabic Regular',
+                          fontSize: 22)))),
+          routes: {
+            HomeScreen.routeName: (_) => HomeScreen(),
+            Profile.routeName: (_) => Profile(),
+            MyChats.routeName: (_) => MyChats(),
+            MyAds.routeName: (_) => MyAds(),
+            AddNewAd.routeName: (_) => AddNewAd(context, ''),
+            AuthScreen.routeName: (_) => AuthScreen(),
+            UserAdsScreen.routeName: (_) => UserAdsScreen(),
+            ShowAd.routeName: (_) => ShowAd(),
+            EditUserInfo.routeName: (_) => EditUserInfo(),
+          },
+          home: auth.isAuth
+              ? HomeScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, snapshot) =>
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen()),
+        ),
       ),
     );
   }
